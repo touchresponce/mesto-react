@@ -48,7 +48,7 @@ export default function Main(props) {
 
       <section className="elements">
         {cards.map((card) => (
-          <Card card={card} key={card._id} onCardClick={props.handleCardClick} />
+          <Card card={card} key={card._id} onCardClick={props.onCardClick} />
         ))}
       </section>
     </main>

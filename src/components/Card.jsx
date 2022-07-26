@@ -1,7 +1,7 @@
 export default function Card(props) {
-  // function handleCardClick() {
-  //   props.onCardClick(props.card);
-  // }
+  function handleClick() {
+    props.onCardClick(props.card);
+  }
 
   return (
     <article className="element">
@@ -9,7 +9,7 @@ export default function Card(props) {
         className="element__image"
         src={props.card.link}
         alt={props.card.name}
-        onClick={props.onCardClick}
+        onClick={handleClick}
       />
       <button className="element__delete" type="button" />
       <div className="element__panel">
