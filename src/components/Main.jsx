@@ -1,12 +1,12 @@
 import React from 'react';
-import api from './utils/Api';
+import api from '../utils/Api';
 import addBtnPlus from '../images/addBtnPlus.svg';
 import Card from './Card';
 
 export default function Main(props) {
   const [userName, setUserName] = React.useState('');
   const [userDescription, setUserDescription] = React.useState('');
-  const [userAvatar, setUserAvatar] = React.useState();
+  const [userAvatar, setUserAvatar] = React.useState('');
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
