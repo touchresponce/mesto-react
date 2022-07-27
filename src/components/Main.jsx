@@ -3,7 +3,7 @@ import api from '../utils/Api';
 import addBtnPlus from '../images/addBtnPlus.svg';
 import Card from './Card';
 
-export default function Main(props) {
+export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
   const [userName, setUserName] = React.useState('');
   const [userDescription, setUserDescription] = React.useState('');
   const [userAvatar, setUserAvatar] = React.useState('');
@@ -29,26 +29,23 @@ export default function Main(props) {
             className="profile__avatar"
             src={userAvatar}
             alt="Аватар"
-            onClick={props.onEditAvatar}></img>
+            onClick={onEditAvatar}></img>
         </div>
         <div className="profile__info">
           <div className="profile__container">
             <h1 className="profile__name">{userName}</h1>
-            <button
-              className="profile__info-edit"
-              type="button"
-              onClick={props.onEditProfile}></button>
+            <button className="profile__info-edit" type="button" onClick={onEditProfile}></button>
           </div>
           <p className="profile__job">{userDescription}</p>
         </div>
-        <button className="profile__info-add" type="button" onClick={props.onAddPlace}>
+        <button className="profile__info-add" type="button" onClick={onAddPlace}>
           <img src={addBtnPlus} alt="Кнопка добавления"></img>
         </button>
       </section>
 
       <section className="elements">
         {cards.map((card) => (
-          <Card card={card} key={card._id} onCardClick={props.onCardClick} />
+          <Card card={card} key={card._id} onCardClick={onCardClick} />
         ))}
       </section>
     </main>

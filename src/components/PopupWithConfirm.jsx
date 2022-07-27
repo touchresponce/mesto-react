@@ -1,10 +1,10 @@
 import PopupWithForm from './PopupWithForm';
 
-export default function PopupWithConfirm(props) {
+export default function PopupWithConfirm({ isOpen, onClose, buttonName }) {
   return (
-    <PopupWithForm title="Вы уверены?" name="confirm" isOpen={props.isOpen} onClose={props.onClose}>
+    <PopupWithForm title="Вы уверены?" name="confirm" isOpen={isOpen} onClose={onClose}>
       <button className="popup__submit margin" type="submit">
-        {props.buttonName}
+        {buttonName}
       </button>
     </PopupWithForm>
   );

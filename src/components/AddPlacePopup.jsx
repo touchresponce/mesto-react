@@ -1,8 +1,8 @@
 import PopupWithForm from './PopupWithForm';
 
-export default function AddPlacePopup(props) {
+export default function AddPlacePopup({ isOpen, onClose, buttonName }) {
   return (
-    <PopupWithForm title="Новое место" name="add" isOpen={props.isOpen} onClose={props.onClose}>
+    <PopupWithForm title="Новое место" name="add" isOpen={isOpen} onClose={onClose}>
       <input
         className="popup__input popup__input_place_name"
         type="text"
@@ -26,7 +26,7 @@ export default function AddPlacePopup(props) {
       />
       <span className="popup__input-error placeUrl-input-error" />
       <button className="popup__submit popup__submit_disabled" type="submit" disabled>
-        {props.buttonName}
+        {buttonName}
       </button>
     </PopupWithForm>
   );

@@ -1,12 +1,8 @@
 import PopupWithForm from './PopupWithForm';
 
-export default function EditProfilePopup(props) {
+export default function EditProfilePopup({ isOpen, onClose, buttonName }) {
   return (
-    <PopupWithForm
-      title="Редактировать профиль"
-      name="edit"
-      isOpen={props.isOpen}
-      onClose={props.onClose}>
+    <PopupWithForm title="Редактировать профиль" name="edit" isOpen={isOpen} onClose={onClose}>
       <input
         className="popup__input popup__input_profile_name"
         type="text"
@@ -32,7 +28,7 @@ export default function EditProfilePopup(props) {
       />
       <span className="popup__input-error userJob-input-error" />
       <button className="popup__submit popup__submit_disabled" type="submit" disabled>
-        {props.buttonName}
+        {buttonName}
       </button>
     </PopupWithForm>
   );
