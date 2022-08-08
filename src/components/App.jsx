@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import api from '../utils/Api';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -15,6 +17,18 @@ export default function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState({ name: '', link: '' });
+  // юзер, карты
+  const [currentUser, setCurrentUser] = useState({});
+  const [cards, setCards] = useState([]);
+
+  useEffect(() => {
+    Promise.all([api.getUserInfo(), api.getCards()])
+      .then(([apiUser, apiCards]) => {
+        setCurrentUser(apiUser);
+        setCards(apiCards);
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   // управление
   function handleEditProfileClick() {
@@ -38,35 +52,38 @@ export default function App() {
   }
 
   return (
-    <div className="page">
-      <Header />
-      <Main
-        onEditProfile={handleEditProfileClick}
-        onAddPlace={handleAddPlaceClick}
-        onEditAvatar={handleEditAvatarClick}
-        onCardClick={handleCardClick}
-      />
-      <Footer />
-      <EditProfilePopup
-        isOpen={isEditProfilePopupOpen}
-        onClose={closeAllPopups}
-        children={EditProfilePopup}
-        buttonName="Сохранить"
-      />
-      <AddPlacePopup
-        isOpen={isAddPlacePopupOpen}
-        onClose={closeAllPopups}
-        children={AddPlacePopup}
-        buttonName="Создать"
-      />
-      <EditAvatarPopup
-        isOpen={isEditAvatarPopupOpen}
-        onClose={closeAllPopups}
-        children={EditAvatarPopup}
-        buttonName="Сохранить"
-      />
-      <PopupWithConfirm isOpen={isConfirmPopupOpen} onClose={closeAllPopups} buttonName="Да" />
-      <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-    </div>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="page">
+        <Header />
+        <Main
+          cards={cards}
+          onEditProfile={handleEditProfileClick}
+          onAddPlace={handleAddPlaceClick}
+          onEditAvatar={handleEditAvatarClick}
+          onCardClick={handleCardClick}
+        />
+        <Footer />
+        <EditProfilePopup
+          isOpen={isEditProfilePopupOpen}
+          onClose={closeAllPopups}
+          children={EditProfilePopup}
+          buttonName="Сохранить"
+        />
+        <AddPlacePopup
+          isOpen={isAddPlacePopupOpen}
+          onClose={closeAllPopups}
+          children={AddPlacePopup}
+          buttonName="Создать"
+        />
+        <EditAvatarPopup
+          isOpen={isEditAvatarPopupOpen}
+          onClose={closeAllPopups}
+          children={EditAvatarPopup}
+          buttonName="Сохранить"
+        />
+        <PopupWithConfirm isOpen={isConfirmPopupOpen} onClose={closeAllPopups} buttonName="Да" />
+        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+      </div>
+    </CurrentUserContext.Provider>
   );
 }

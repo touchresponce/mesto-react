@@ -1,25 +1,11 @@
-import { useState, useEffect } from 'react';
-import api from '../utils/Api';
+import { useContext } from 'react';
 import addBtnPlus from '../images/addBtnPlus.svg';
 import Card from './Card';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 
-export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
-  const [userName, setUserName] = useState('');
-  const [userDescription, setUserDescription] = useState('');
-  const [userAvatar, setUserAvatar] = useState('');
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getCards()])
-      .then(([apiUser, apiCards]) => {
-        setUserName(apiUser.name);
-        setUserDescription(apiUser.about);
-        setUserAvatar(apiUser.avatar);
-        // карточки
-        setCards(apiCards);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+export default function Main({ cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
+  //
+  const currentUser = useContext(CurrentUserContext);
 
   return (
     <main className="main">
@@ -27,16 +13,16 @@ export default function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardCl
         <div className="profile__wrapper">
           <img
             className="profile__avatar"
-            src={userAvatar}
+            src={currentUser.avatar}
             alt="Аватар"
             onClick={onEditAvatar}></img>
         </div>
         <div className="profile__info">
           <div className="profile__container">
-            <h1 className="profile__name">{userName}</h1>
+            <h1 className="profile__name">{currentUser.name}</h1>
             <button className="profile__info-edit" type="button" onClick={onEditProfile}></button>
           </div>
-          <p className="profile__job">{userDescription}</p>
+          <p className="profile__job">{currentUser.about}</p>
         </div>
         <button className="profile__info-add" type="button" onClick={onAddPlace}>
           <img src={addBtnPlus} alt="Кнопка добавления"></img>
