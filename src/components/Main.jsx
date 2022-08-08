@@ -3,7 +3,14 @@ import addBtnPlus from '../images/addBtnPlus.svg';
 import Card from './Card';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 
-export default function Main({ cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
+export default function Main({
+  cards,
+  handleCardLike,
+  onEditProfile,
+  onAddPlace,
+  onEditAvatar,
+  onCardClick,
+}) {
   //
   const currentUser = useContext(CurrentUserContext);
 
@@ -31,7 +38,12 @@ export default function Main({ cards, onEditProfile, onAddPlace, onEditAvatar, o
 
       <section className="elements">
         {cards.map((card) => (
-          <Card card={card} key={card._id} onCardClick={onCardClick} />
+          <Card
+            card={card}
+            key={card._id}
+            onCardClick={onCardClick}
+            handleCardLike={handleCardLike}
+          />
         ))}
       </section>
     </main>

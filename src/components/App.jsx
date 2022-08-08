@@ -30,7 +30,7 @@ export default function App() {
       .catch((err) => console.log(err));
   }, []);
 
-  // управление
+  // управление модалками
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
   }
@@ -51,12 +51,27 @@ export default function App() {
     setSelectedCard(card);
   }
 
+  // лайки логика
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    if (!isLiked) {
+      api.like(card._id, !isLiked).then((newCard) => {
+        setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+      });
+    } else {
+      api.dislike(card._id, !isLiked).then((newCard) => {
+        setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+      });
+    }
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <Header />
         <Main
           cards={cards}
+          handleCardLike={handleCardLike}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
