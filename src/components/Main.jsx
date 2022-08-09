@@ -5,12 +5,12 @@ import CurrentUserContext from '../contexts/CurrentUserContext';
 
 export default function Main({
   cards,
-  handleCardLike,
+  onCardLike,
   onEditProfile,
   onAddPlace,
   onEditAvatar,
   onCardClick,
-  handleCardDelete,
+  onCardDelete,
 }) {
   //
   const currentUser = useContext(CurrentUserContext);
@@ -43,8 +43,8 @@ export default function Main({
             card={card}
             key={card._id}
             onCardClick={onCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete}
           />
         ))}
       </section>

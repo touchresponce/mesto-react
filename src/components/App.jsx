@@ -11,7 +11,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import PopupWithConfirm from './PopupWithConfirm';
 
 export default function App() {
-  // cтейты попапов
+  // cтейты модалок
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -81,17 +81,27 @@ export default function App() {
       .catch((err) => console.log(err));
   }
 
-  // редактирование юзера
+  // ред-ие юзера
   function handleUpdateUser(data) {
     api
       .setUserInfo(data)
-      .then((info) => {
-        setCurrentUser(info);
+      .then((res) => {
+        setCurrentUser(res);
         closeAllPopups();
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => console.log(err));
+  }
+
+  // ред-ие аватарки
+  function handleUpdateAvatar(data) {
+    console.log(data);
+    api
+      .setAvatar(data)
+      .then((res) => {
+        setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err));
   }
 
   return (
@@ -100,8 +110,8 @@ export default function App() {
         <Header />
         <Main
           cards={cards}
-          handleCardLike={handleCardLike}
-          handleCardDelete={handleCardDelete}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
@@ -125,6 +135,7 @@ export default function App() {
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           children={EditAvatarPopup}
+          onUpdateAvatar={handleUpdateAvatar}
           buttonName="Сохранить"
         />
         <PopupWithConfirm isOpen={isConfirmPopupOpen} onClose={closeAllPopups} buttonName="Да" />
