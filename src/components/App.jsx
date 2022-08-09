@@ -55,14 +55,43 @@ export default function App() {
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     if (!isLiked) {
-      api.like(card._id, !isLiked).then((newCard) => {
-        setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-      });
+      api
+        .like(card._id, !isLiked)
+        .then((newCard) => {
+          setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+        })
+        .catch((err) => console.log(err));
     } else {
-      api.dislike(card._id, !isLiked).then((newCard) => {
-        setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-      });
+      api
+        .dislike(card._id, !isLiked)
+        .then((newCard) => {
+          setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+        })
+        .catch((err) => console.log(err));
     }
+  }
+
+  // удаление
+  function handleCardDelete(card) {
+    api
+      .deleteCard(card._id)
+      .then(() => {
+        setCards((state) => state.filter((item) => item._id !== card._id));
+      })
+      .catch((err) => console.log(err));
+  }
+
+  // редактирование юзера
+  function handleUpdateUser(data) {
+    api
+      .setUserInfo(data)
+      .then((info) => {
+        setCurrentUser(info);
+        closeAllPopups();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
@@ -72,6 +101,7 @@ export default function App() {
         <Main
           cards={cards}
           handleCardLike={handleCardLike}
+          handleCardDelete={handleCardDelete}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
@@ -82,6 +112,7 @@ export default function App() {
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           children={EditProfilePopup}
+          onUpdateUser={handleUpdateUser}
           buttonName="Сохранить"
         />
         <AddPlacePopup
