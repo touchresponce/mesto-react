@@ -1,10 +1,7 @@
 import { useContext } from 'react';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 
-export default function Card({ card, onCardClick, onCardLike, onCardDelete }) {
-  function handleClick() {
-    onCardClick(card);
-  }
+export default function Card({ card, onCardClick, onCardLike, onConfirmOpen, onConfirm }) {
   // контекст юзера
   const currentUser = useContext(CurrentUserContext);
 
@@ -20,13 +17,23 @@ export default function Card({ card, onCardClick, onCardLike, onCardDelete }) {
     isLiked ? 'element__like element__like-active' : 'element__like'
   }`;
 
+  function handleConfirm(card) {
+    onConfirmOpen(true);
+    onConfirm(card._id);
+  }
+
   return (
     <article className="element">
-      <img className="element__image" src={card.link} alt={card.name} onClick={handleClick} />
+      <img
+        className="element__image"
+        src={card.link}
+        alt={card.name}
+        onClick={() => onCardClick(card)}
+      />
       <button
         className={cardDeleteButtonClassName}
         type="button"
-        onClick={() => onCardDelete(card)}
+        onClick={() => handleConfirm(card)}
       />
       <div className="element__panel">
         <h2 className="element__panel-text">{card.name}</h2>

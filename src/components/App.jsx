@@ -20,6 +20,10 @@ export default function App() {
   // юзер, карты
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
+  // стейт карточки для удаления
+  const [idCardToDelete, setIdCardToDelete] = useState('');
+  // стейт текста кнопки сабмита
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getCards()])
@@ -73,45 +77,63 @@ export default function App() {
 
   // удаление
   function handleCardDelete(card) {
+    setIsLoading(true);
     api
-      .deleteCard(card._id)
+      .deleteCard(idCardToDelete)
       .then(() => {
-        setCards((state) => state.filter((item) => item._id !== card._id));
+        setCards((state) => state.filter((item) => item._id !== idCardToDelete));
+        closeAllPopups();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   // ред-ие юзера
   function handleUpdateUser(data) {
+    setIsLoading(true);
     api
       .setUserInfo(data)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   // ред-ие аватарки
   function handleUpdateAvatar(data) {
+    setIsLoading(true);
     api
       .setAvatar(data)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   // добавление карт
   function handleAddPlaceSubmit(data) {
+    setIsLoading(true);
+
     api
       .setCard(data)
       .then((res) => {
         setCards([res, ...cards]);
         closeAllPopups();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   return (
@@ -121,11 +143,12 @@ export default function App() {
         <Main
           cards={cards}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onConfirmOpen={setIsConfirmPopupOpen}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
+          onConfirm={setIdCardToDelete}
         />
         <Footer />
         <EditProfilePopup
@@ -134,6 +157,7 @@ export default function App() {
           children={EditProfilePopup}
           onUpdateUser={handleUpdateUser}
           buttonName="Сохранить"
+          isLoading={isLoading}
         />
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
@@ -141,6 +165,7 @@ export default function App() {
           children={AddPlacePopup}
           onAddPlace={handleAddPlaceSubmit}
           buttonName="Создать"
+          isLoading={isLoading}
         />
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
@@ -148,8 +173,15 @@ export default function App() {
           children={EditAvatarPopup}
           onUpdateAvatar={handleUpdateAvatar}
           buttonName="Сохранить"
+          isLoading={isLoading}
         />
-        <PopupWithConfirm isOpen={isConfirmPopupOpen} onClose={closeAllPopups} buttonName="Да" />
+        <PopupWithConfirm
+          isOpen={isConfirmPopupOpen}
+          onClose={closeAllPopups}
+          buttonName="Да"
+          onCardDelete={handleCardDelete}
+          isLoading={isLoading}
+        />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </div>
     </CurrentUserContext.Provider>

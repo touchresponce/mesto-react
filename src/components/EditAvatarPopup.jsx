@@ -1,7 +1,13 @@
 import { useRef } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-export default function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, buttonName }) {
+export default function EditAvatarPopup({
+  isOpen,
+  onClose,
+  onUpdateAvatar,
+  buttonName,
+  isLoading,
+}) {
   //
   const avatarInput = useRef('');
 
@@ -30,8 +36,8 @@ export default function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, butto
         ref={avatarInput}
       />
       <span className="popup__input-error avatar-input-error" />
-      <button className="popup__submit popup__submit_disabled" type="submit">
-        {buttonName}
+      <button className="popup__submit" type="submit">
+        {isLoading ? 'Сохранение...' : buttonName}
       </button>
     </PopupWithForm>
   );

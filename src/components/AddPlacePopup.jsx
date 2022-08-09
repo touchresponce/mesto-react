@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-export default function AddPlacePopup({ isOpen, onClose, onAddPlace, buttonName }) {
+export default function AddPlacePopup({ isOpen, onClose, onAddPlace, buttonName, isLoading }) {
   //
   const nameInput = useRef('');
   const linkInput = useRef('');
@@ -45,8 +45,8 @@ export default function AddPlacePopup({ isOpen, onClose, onAddPlace, buttonName 
         ref={linkInput}
       />
       <span className="popup__input-error placeUrl-input-error" />
-      <button className="popup__submit popup__submit_disabled" type="submit">
-        {buttonName}
+      <button className="popup__submit" type="submit">
+        {isLoading ? 'Сохранение...' : buttonName}
       </button>
     </PopupWithForm>
   );
