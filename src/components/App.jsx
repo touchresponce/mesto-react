@@ -76,7 +76,7 @@ export default function App() {
   }
 
   // удаление
-  function handleCardDelete(card) {
+  function handleCardDelete() {
     setIsLoading(true);
     api
       .deleteCard(idCardToDelete)
@@ -123,7 +123,6 @@ export default function App() {
   // добавление карт
   function handleAddPlaceSubmit(data) {
     setIsLoading(true);
-
     api
       .setCard(data)
       .then((res) => {
@@ -135,6 +134,17 @@ export default function App() {
         setIsLoading(false);
       });
   }
+
+  // закрытие на esc
+  useEffect(() => {
+    function closeOnEsc(evt) {
+      if (evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    document.addEventListener('keydown', closeOnEsc);
+    return () => document.removeEventListener('keydown', closeOnEsc);
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

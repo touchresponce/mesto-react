@@ -10,7 +10,6 @@ export default function Main({
   onAddPlace,
   onEditAvatar,
   onCardClick,
-  // onCardDelete,
   onConfirmOpen,
   onConfirm,
 }) {
@@ -46,7 +45,6 @@ export default function Main({
             key={card._id}
             onCardClick={onCardClick}
             onCardLike={onCardLike}
-            // onCardDelete={onCardDelete}
             onConfirmOpen={onConfirmOpen}
             onConfirm={onConfirm}
           />
