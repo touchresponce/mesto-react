@@ -94,11 +94,21 @@ export default function App() {
 
   // ред-ие аватарки
   function handleUpdateAvatar(data) {
-    console.log(data);
     api
       .setAvatar(data)
       .then((res) => {
         setCurrentUser(res);
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err));
+  }
+
+  // добавление карт
+  function handleAddPlaceSubmit(data) {
+    api
+      .setCard(data)
+      .then((res) => {
+        setCards([res, ...cards]);
         closeAllPopups();
       })
       .catch((err) => console.log(err));
@@ -129,6 +139,7 @@ export default function App() {
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           children={AddPlacePopup}
+          onAddPlace={handleAddPlaceSubmit}
           buttonName="Создать"
         />
         <EditAvatarPopup
