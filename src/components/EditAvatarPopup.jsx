@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import PopupWithForm from './PopupWithForm';
 import useFormValidation from '../utils/useFormValidation';
 
@@ -12,7 +12,7 @@ export default function EditAvatarPopup({
 }) {
   const avatarInput = useRef('');
 
-  const { values, handleChange, errors, isValid, forceValidationChange } = useFormValidation();
+  const { handleChange, errors, isValid, forceValidationChange } = useFormValidation();
 
   function handleLinkInput(evt) {
     handleChange(evt);
@@ -21,20 +21,11 @@ export default function EditAvatarPopup({
   function handleSubmit(evt) {
     evt.preventDefault();
     onUpdateAvatar({
-      avatar: values.avatar,
+      avatar: avatarInput.current.value,
     });
     forceValidationChange();
     evt.target.reset();
   }
-
-  // function handleSubmit(evt) {
-  //   evt.preventDefault();
-  //   onUpdateAvatar({
-  //     avatar: avatarInput.current.value,
-  //   });
-  //   setFormValidity(false);
-  //   evt.target.reset();
-  // }
 
   return (
     <PopupWithForm
