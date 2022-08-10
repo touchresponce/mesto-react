@@ -1,53 +1,79 @@
-import { useRef } from 'react';
 import PopupWithForm from './PopupWithForm';
+import useFormValidation from '../utils/useFormValidation';
 
-export default function AddPlacePopup({ isOpen, onClose, onAddPlace, buttonName, isLoading }) {
-  //
-  const nameInput = useRef('');
-  const linkInput = useRef('');
+export default function AddPlacePopup({
+  isOpen,
+  onClose,
+  onAddPlace,
+  buttonName,
+  title,
+  isLoading,
+}) {
+  const { values, handleChange, errors, isValid, forceValidationChange } = useFormValidation();
+
+  function handleNameInput(evt) {
+    handleChange(evt);
+  }
+
+  function handleLinkInput(evt) {
+    handleChange(evt);
+  }
 
   function handleSubmit(evt) {
     evt.preventDefault();
     onAddPlace({
-      name: nameInput.current.value,
-      link: linkInput.current.value,
+      name: values.name,
+      link: values.link,
     });
+    forceValidationChange();
+    evt.target.reset();
   }
 
   return (
-    <PopupWithForm
-      title="Новое место"
-      name="add"
-      isOpen={isOpen}
-      onClose={onClose}
-      onSubmit={handleSubmit}>
-      <input
-        className="popup__input popup__input_place_name"
-        type="text"
-        name="name"
-        id="placeName-input"
-        placeholder="Название"
-        minLength="2"
-        maxLength="30"
-        required
-        autoComplete="on"
-        ref={nameInput}
-      />
-      <span className="popup__input-error placeName-input-error" />
-      <input
-        className="popup__input popup__input_place_url"
-        type="url"
-        name="link"
-        id="placeUrl-input"
-        placeholder="Ссылка на картинку"
-        required
-        autoComplete="on"
-        ref={linkInput}
-      />
-      <span className="popup__input-error placeUrl-input-error" />
-      <button className="popup__submit" type="submit">
-        {isLoading ? 'Сохранение...' : buttonName}
-      </button>
+    <PopupWithForm name="add" isOpen={isOpen} onClose={onClose}>
+      <form className="form add-form" name="add-form" onSubmit={handleSubmit}>
+        <h2 className="popup__title">{title}</h2>
+        <input
+          className="popup__input popup__input_place_name"
+          type="text"
+          name="name"
+          id="placeName-input"
+          placeholder="Название"
+          minLength="2"
+          maxLength="30"
+          required
+          autoComplete="off"
+          onChange={handleNameInput}
+        />
+        <span
+          className={`popup__input-error placeName-input-error ${
+            !isValid ? 'popup__input-error_active' : ''
+          }`}>
+          {errors.name}
+        </span>
+        <input
+          className="popup__input popup__input_place_url"
+          type="url"
+          name="link"
+          id="placeUrl-input"
+          placeholder="Ссылка на картинку"
+          required
+          autoComplete="on"
+          onChange={handleLinkInput}
+        />
+        <span
+          className={`popup__input-error placeUrl-input-error ${
+            !isValid ? 'popup__input-error_active' : ''
+          }`}>
+          {errors.link}
+        </span>
+        <button
+          className={`popup__submit ${isValid ? '' : 'popup__submit_disabled'}`}
+          type="submit"
+          disabled={!isValid}>
+          {isLoading ? 'Сохранение...' : buttonName}
+        </button>
+      </form>
     </PopupWithForm>
   );
 }

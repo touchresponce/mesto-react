@@ -1,71 +1,98 @@
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import PopupWithForm from './PopupWithForm';
+import useFormValidation from '../utils/useFormValidation';
 
-export default function EditProfilePopup({ isOpen, onClose, onUpdateUser, buttonName, isLoading }) {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
+export default function EditProfilePopup({
+  isOpen,
+  onClose,
+  onUpdateUser,
+  buttonName,
+  title,
+  isLoading,
+}) {
   const currentUser = useContext(CurrentUserContext);
 
+  const { values, handleChange, errors, isValid, setValues, resetForm } = useFormValidation();
+
   useEffect(() => {
-    setName(currentUser.name);
-    setDescription(currentUser.about);
+    setValues({
+      name: currentUser.name,
+      info: currentUser.about,
+    });
   }, [currentUser]);
 
-  function handleName(evt) {
-    setName(evt.target.value);
+  function handleNameInput(evt) {
+    handleChange(evt);
   }
 
-  function handleDescription(evt) {
-    setDescription(evt.target.value);
+  function handleInfoInput(evt) {
+    handleChange(evt);
   }
 
   function handleSubmit(evt) {
     evt.preventDefault();
     onUpdateUser({
-      name: name,
-      about: description,
+      name: values.name,
+      about: values.info,
     });
+    resetForm();
+    evt.target.reset();
   }
 
   return (
-    <PopupWithForm
-      title="Редактировать профиль"
-      name="edit"
-      isOpen={isOpen}
-      onClose={onClose}
-      onSubmit={handleSubmit}>
-      <input
-        className="popup__input popup__input_profile_name"
-        type="text"
-        name="name"
-        id="userName-input"
-        placeholder="Имя"
-        minLength="2"
-        maxLength="40"
-        required
-        autoComplete="off"
-        onChange={handleName}
-        value={name || ''}
-      />
-      <span className="popup__input-error userName-input-error" />
-      <input
-        className="popup__input popup__input_profile_job"
-        type="text"
-        name="info"
-        id="userJob-input"
-        placeholder="Работа"
-        minLength="2"
-        maxLength="200"
-        required
-        autoComplete="off"
-        onChange={handleDescription}
-        value={description || ''}
-      />
-      <span className="popup__input-error userJob-input-error" />
-      <button className="popup__submit" type="submit">
-        {isLoading ? 'Сохранение...' : buttonName}
-      </button>
+    <PopupWithForm name="edit" isOpen={isOpen} onClose={onClose}>
+      <form className="form edit-form" name="edit-form" onSubmit={handleSubmit}>
+        <h2 className="popup__title">{title}</h2>
+        <input
+          className={`popup__input popup__input_profile_name ${
+            errors.name ? 'popup__input_type_error' : ''
+          }`}
+          type="text"
+          name="name"
+          id="userName-input"
+          placeholder="Имя"
+          minLength="2"
+          maxLength="40"
+          required
+          autoComplete="off"
+          onChange={handleNameInput}
+          value={values.name || ''}
+        />
+        <span
+          className={`popup__input-error userName-input-error ${
+            !isValid ? 'popup__input-error_active' : ''
+          }`}>
+          {errors.name}
+        </span>
+        <input
+          className={`popup__input popup__input_profile_job ${
+            errors.info ? 'popup__input_type_error' : ''
+          }`}
+          type="text"
+          name="info"
+          id="userJob-input"
+          placeholder="Работа"
+          minLength="2"
+          maxLength="200"
+          required
+          autoComplete="off"
+          onChange={handleInfoInput}
+          value={values.info || ''}
+        />
+        <span
+          className={`popup__input-error userJob-input-error ${
+            !isValid ? 'popup__input-error_active' : ''
+          }`}>
+          {errors.info}
+        </span>
+        <button
+          className={`popup__submit ${isValid ? '' : 'popup__submit_disabled'}`}
+          type="submit"
+          disabled={!isValid}>
+          {isLoading ? 'Сохранение...' : buttonName}
+        </button>
+      </form>
     </PopupWithForm>
   );
 }

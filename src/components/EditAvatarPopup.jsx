@@ -1,22 +1,40 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
+import useFormValidation from '../utils/useFormValidation';
 
 export default function EditAvatarPopup({
   isOpen,
   onClose,
   onUpdateAvatar,
   buttonName,
+  title,
   isLoading,
 }) {
-  //
   const avatarInput = useRef('');
+
+  const { values, handleChange, errors, isValid, forceValidationChange } = useFormValidation();
+
+  function handleLinkInput(evt) {
+    handleChange(evt);
+  }
 
   function handleSubmit(evt) {
     evt.preventDefault();
     onUpdateAvatar({
-      avatar: avatarInput.current.value,
+      avatar: values.avatar,
     });
+    forceValidationChange();
+    evt.target.reset();
   }
+
+  // function handleSubmit(evt) {
+  //   evt.preventDefault();
+  //   onUpdateAvatar({
+  //     avatar: avatarInput.current.value,
+  //   });
+  //   setFormValidity(false);
+  //   evt.target.reset();
+  // }
 
   return (
     <PopupWithForm
@@ -25,20 +43,34 @@ export default function EditAvatarPopup({
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}>
-      <input
-        className="popup__input popup__input_type_avatar"
-        type="url"
-        name="avatar"
-        id="avatar-input"
-        placeholder="Ссылка"
-        required
-        autoComplete="off"
-        ref={avatarInput}
-      />
-      <span className="popup__input-error avatar-input-error" />
-      <button className="popup__submit" type="submit">
-        {isLoading ? 'Сохранение...' : buttonName}
-      </button>
+      <form className="form avatar-form" name="avatar-form" onSubmit={handleSubmit}>
+        <h2 className="popup__title">{title}</h2>
+        <input
+          className={`popup__input popup__input_type_avatar ${
+            errors.avatar ? 'popup__input_type_error' : ''
+          }`}
+          type="url"
+          name="avatar"
+          id="avatar-input"
+          placeholder="Ссылка"
+          required
+          autoComplete="off"
+          ref={avatarInput}
+          onChange={handleLinkInput}
+        />
+        <span
+          className={`popup__input-error avatar-input-error ${
+            !isValid ? 'popup__input-error_active' : ''
+          }`}>
+          {errors.avatar}
+        </span>
+        <button
+          className={`popup__submit ${isValid ? '' : 'popup__submit_disabled'}`}
+          type="submit"
+          disabled={!isValid}>
+          {isLoading ? 'Сохранение...' : buttonName}
+        </button>
+      </form>
     </PopupWithForm>
   );
 }

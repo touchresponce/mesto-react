@@ -167,6 +167,7 @@ export default function App() {
           children={EditProfilePopup}
           onUpdateUser={handleUpdateUser}
           buttonName="Сохранить"
+          title="Редактировать профиль"
           isLoading={isLoading}
         />
         <AddPlacePopup
@@ -175,6 +176,7 @@ export default function App() {
           children={AddPlacePopup}
           onAddPlace={handleAddPlaceSubmit}
           buttonName="Создать"
+          title="Новое место"
           isLoading={isLoading}
         />
         <EditAvatarPopup
@@ -183,12 +185,14 @@ export default function App() {
           children={EditAvatarPopup}
           onUpdateAvatar={handleUpdateAvatar}
           buttonName="Сохранить"
+          title="Обновить аватар"
           isLoading={isLoading}
         />
         <PopupWithConfirm
           isOpen={isConfirmPopupOpen}
           onClose={closeAllPopups}
           buttonName="Да"
+          title="Вы уверены?"
           onCardDelete={handleCardDelete}
           isLoading={isLoading}
         />
