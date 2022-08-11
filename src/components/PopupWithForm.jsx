@@ -1,4 +1,5 @@
 export default function PopupWithForm({ name, isOpen, onClose, children }) {
+  // закрытие на оверлей
   function handleOverlayClose(evt) {
     evt.target === evt.currentTarget && onClose();
   }

@@ -34,7 +34,7 @@ export default function App() {
       .catch((err) => console.log(err));
   }, []);
 
-  // функция закрытия на esc
+  // закрытие на esc
   function closeOnEsc(evt) {
     if (evt.key === 'Escape') {
       closeAllPopups();
@@ -54,6 +54,10 @@ export default function App() {
     setIsEditAvatarPopupOpen(true);
     document.addEventListener('keydown', closeOnEsc);
   }
+  function handleCardClick(card) {
+    setSelectedCard(card);
+    document.addEventListener('keydown', closeOnEsc);
+  }
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
@@ -61,9 +65,6 @@ export default function App() {
     setIsConfirmPopupOpen(false);
     setSelectedCard({});
     document.removeEventListener('keydown', closeOnEsc);
-  }
-  function handleCardClick(card) {
-    setSelectedCard(card);
   }
 
   // лайки логика
@@ -196,6 +197,7 @@ export default function App() {
           onCardDelete={handleCardDelete}
           isLoading={isLoading}
         />
+
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       </div>
     </CurrentUserContext.Provider>
