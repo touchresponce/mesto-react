@@ -23,9 +23,12 @@ export default function useFormValidation() {
     [setValues, setErrors, setIsValid],
   );
 
-  const forceValidationChange = (evt) => {
-    setIsValid(false);
-  };
+  const forceValidationChange = useCallback(
+    (newIsValid = false) => {
+      setIsValid(newIsValid);
+    },
+    [setIsValid],
+  );
 
   return { values, handleChange, errors, isValid, resetForm, setValues, forceValidationChange };
 }

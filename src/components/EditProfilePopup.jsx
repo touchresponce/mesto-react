@@ -12,15 +12,17 @@ export default function EditProfilePopup({
   isLoading,
 }) {
   const currentUser = useContext(CurrentUserContext);
-
-  const { values, handleChange, errors, isValid, setValues, resetForm } = useFormValidation();
+  const { values, handleChange, errors, isValid, setValues, forceValidationChange } =
+    useFormValidation();
 
   useEffect(() => {
-    setValues({
-      name: currentUser.name,
-      info: currentUser.about,
-    });
-  }, [currentUser]);
+    isOpen &&
+      setValues({
+        name: currentUser.name,
+        info: currentUser.about,
+      });
+    forceValidationChange();
+  }, [isOpen, setValues, currentUser]);
 
   function handleNameInput(evt) {
     handleChange(evt);
@@ -36,8 +38,7 @@ export default function EditProfilePopup({
       name: values.name,
       about: values.info,
     });
-    resetForm();
-    evt.target.reset();
+    forceValidationChange();
   }
 
   return (

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 import useFormValidation from '../utils/useFormValidation';
 
@@ -11,6 +11,7 @@ export default function EditAvatarPopup({
   isLoading,
 }) {
   const avatarInput = useRef('');
+  const form = useRef('');
 
   const { handleChange, errors, isValid, forceValidationChange } = useFormValidation();
 
@@ -24,8 +25,11 @@ export default function EditAvatarPopup({
       avatar: avatarInput.current.value,
     });
     forceValidationChange();
-    evt.target.reset();
   }
+
+  useEffect(() => {
+    isOpen && form.current.reset();
+  }, [isOpen]);
 
   return (
     <PopupWithForm
@@ -34,7 +38,7 @@ export default function EditAvatarPopup({
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}>
-      <form className="form avatar-form" name="avatar-form" onSubmit={handleSubmit}>
+      <form className="form avatar-form" name="avatar-form" onSubmit={handleSubmit} ref={form}>
         <h2 className="popup__title">{title}</h2>
         <input
           className={`popup__input popup__input_type_avatar ${

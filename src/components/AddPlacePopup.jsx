@@ -1,5 +1,6 @@
 import PopupWithForm from './PopupWithForm';
 import useFormValidation from '../utils/useFormValidation';
+import { useEffect, useRef } from 'react';
 
 export default function AddPlacePopup({
   isOpen,
@@ -10,6 +11,7 @@ export default function AddPlacePopup({
   isLoading,
 }) {
   const { values, handleChange, errors, isValid, forceValidationChange } = useFormValidation();
+  const form = useRef('');
 
   function handleNameInput(evt) {
     handleChange(evt);
@@ -26,12 +28,15 @@ export default function AddPlacePopup({
       link: values.link,
     });
     forceValidationChange();
-    evt.target.reset();
   }
+
+  useEffect(() => {
+    isOpen && form.current.reset();
+  }, [isOpen]);
 
   return (
     <PopupWithForm name="add" isOpen={isOpen} onClose={onClose}>
-      <form className="form add-form" name="add-form" onSubmit={handleSubmit}>
+      <form className="form add-form" name="add-form" onSubmit={handleSubmit} ref={form}>
         <h2 className="popup__title">{title}</h2>
         <input
           className="popup__input popup__input_place_name"
