@@ -34,29 +34,29 @@ export default function App() {
       .catch((err) => console.log(err));
   }, []);
 
-  // закрытие на esc
-  function closeOnEsc(evt) {
-    if (evt.key === 'Escape') {
-      closeAllPopups();
-    }
-  }
+  // // закрытие на esc
+  // function closeOnEsc(evt) {
+  //   if (evt.key === 'Escape') {
+  //     closeAllPopups();
+  //   }
+  // }
 
   // управление модалками
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(true);
-    document.addEventListener('keydown', closeOnEsc);
+    // document.addEventListener('keydown', closeOnEsc);
   }
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true);
-    document.addEventListener('keydown', closeOnEsc);
+    // document.addEventListener('keydown', closeOnEsc);
   }
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
-    document.addEventListener('keydown', closeOnEsc);
+    // document.addEventListener('keydown', closeOnEsc);
   }
   function handleCardClick(card) {
     setSelectedCard(card);
-    document.addEventListener('keydown', closeOnEsc);
+    // document.addEventListener('keydown', closeOnEsc);
   }
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
@@ -64,7 +64,7 @@ export default function App() {
     setIsEditAvatarPopupOpen(false);
     setIsConfirmPopupOpen(false);
     setSelectedCard({});
-    document.removeEventListener('keydown', closeOnEsc);
+    // document.removeEventListener('keydown', closeOnEsc);
   }
 
   // лайки логика

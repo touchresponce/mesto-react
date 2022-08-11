@@ -1,7 +1,24 @@
+import { useEffect } from 'react';
+
 export default function ImagePopup({ card, onClose }) {
   function handleOverlayClose(evt) {
     evt.target === evt.currentTarget && onClose();
   }
+
+  // закрытие на esc
+  function closeOnEsc(evt) {
+    if (evt.key === 'Escape') {
+      onClose();
+      document.removeEventListener('keydown', closeOnEsc);
+    }
+  }
+
+  useEffect(() => {
+    if (card.link) {
+      document.addEventListener('keydown', closeOnEsc);
+    }
+    // console.log(card);
+  }, [card]);
 
   return (
     <div

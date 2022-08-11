@@ -1,8 +1,22 @@
+import { useEffect } from 'react';
+
 export default function PopupWithForm({ name, isOpen, onClose, children }) {
   // закрытие на оверлей
   function handleOverlayClose(evt) {
     evt.target === evt.currentTarget && onClose();
   }
+
+  // закрытие на esc
+  function closeOnEsc(evt) {
+    if (evt.key === 'Escape') {
+      onClose();
+      document.removeEventListener('keydown', closeOnEsc);
+    }
+  }
+
+  useEffect(() => {
+    isOpen && document.addEventListener('keydown', closeOnEsc);
+  }, [isOpen]);
 
   return (
     <div
