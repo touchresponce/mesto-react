@@ -26,7 +26,13 @@ export default function PopupWithForm({ name, isOpen, onClose, children }) {
       className={`popup popup-${name} ${isOpen ? 'popup_opened' : ''}`}
       onClick={handleOverlayClose}>
       <div className="popup__container">
-        <button className="popup__close" onClick={onClose} />
+        <button
+          className="popup__close"
+          onClick={() => {
+            onClose();
+            document.removeEventListener('keydown', closeOnEsc);
+          }}
+        />
         {children}
       </div>
     </div>

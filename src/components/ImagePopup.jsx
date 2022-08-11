@@ -30,7 +30,13 @@ export default function ImagePopup({ card, onClose }) {
       <figure className="figure">
         <img className="popup__image" src={card.link} alt={card.name}></img>
         <figcaption className="popup__figcaption">{card.name}</figcaption>
-        <button className="popup__close" type="button" onClick={onClose}></button>
+        <button
+          className="popup__close"
+          type="button"
+          onClick={() => {
+            onClose();
+            document.removeEventListener('keydown', closeOnEsc);
+          }}></button>
       </figure>
     </div>
   );
